@@ -14,6 +14,7 @@ but the following information will help you get started.
 * **Throughput** measures how many input tensors can be processed per second with batches of size greater than one.
 Typically for maximum throughput, optimal performance is achieved by exercising all the physical cores on a socket.
 * **Latency** (also called real-time inference) is a measurement of the time it takes to process a single input tensor, i.e. a batch of size one.
+
 In a real-time inference scenario, optimal latency is achieved by minimizing thread launching and orchestration between concurrent processes.
 This guide will help you set your TensorFlow model server options for good balanced performance over both metrics.
 However, if you want to prioritize one metric over the other or further tune TensorFlow Serving for your specific model, see the tutorials.
