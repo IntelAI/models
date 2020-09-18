@@ -139,6 +139,17 @@ if __name__ == "__main__":
       start_time = time.time()
       results = sess.run(output_tensor, {input_tensor: image_data})
       elapsed_time = time.time() - start_time
+      total_images += batch_size
+      total_time += elapsed_time
       if((t+1) % 10 == 0):
         print("steps = {0}, {1} images/sec"
               "".format(t+1, batch_size/elapsed_time));
+
+    print('Total steps = %d' % steps)
+    print('Average time: %.6f sec' % (total_time / steps))
+    images_per_sec = total_images / total_time
+    print('Total images/sec = %.2f images/sec' % images_per_sec)
+    if batch_size == 1:
+      latency = 1000 / images_per_sec
+      print('Latency ms/step = %.1f ms' % (latency))
+
