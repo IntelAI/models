@@ -2,7 +2,7 @@
 
 This repository contains **links to pre-trained models, sample scripts, best practices, and step-by-step tutorials** for many popular open-source machine learning models optimized by Intel to run on Intel® Xeon® Scalable processors. 
 
-## Purpose of the Model Zoo
+## Purpose of the Intel Model Zoo
 
   - Demonstrate the AI workloads and deep learning models Intel has optimized and validated to run on Intel hardware
   - Show how to efficiently execute, train, and deploy Intel-optimized models
