@@ -14,3 +14,5 @@ absl-py
 notebook>=6.1.5
 
 pygments>=2.7.4 # not directly required, pinned by Snyk to avoid a vulnerability
+jupyter-server>=2.7.2 # not directly required, pinned by Snyk to avoid a vulnerability
+tornado>=6.3.3 # not directly required, pinned by Snyk to avoid a vulnerability
