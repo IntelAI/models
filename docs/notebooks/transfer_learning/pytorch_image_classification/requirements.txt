@@ -12,4 +12,4 @@ psutil==5.9.0
 torch==2.0.1 # fixed for Snyk scans to avoid vulnerability
 torchvision==0.15.2 # fixed for Snyk scans to avoid vulnerability
 wheel==0.38.0 # Included this to avoid a vulnerability
-urllib3==1.26.8
+urllib3==1.26.18
