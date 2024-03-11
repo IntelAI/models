@@ -253,6 +253,33 @@ class PlatformUtil:
                 print("cpuset.cpus: {}".format(cpuset))
         return cpuset
 
+    def get_cpu_cores(self):
+        with open('/proc/cpuinfo', 'r') as f:
+            lines = f.readlines()
+        cpu_cores = {}
+        bind_cpu_cores = []
+        core_id = None
+        numa_id = None
+        for line in lines:
+            if line.startswith('processor'):
+                cpu_id = int(line.split(':')[-1].strip())
+            elif line.startswith('physical id'):
+                numa_id = int(line.split(':')[-1].strip())
+            elif line.startswith('core id'):
+                core_id = int(line.split(':')[-1].strip())
+                if numa_id not in cpu_cores:
+                    cpu_cores[numa_id] = {}
+                if core_id not in cpu_cores[numa_id]:
+                    cpu_cores[numa_id][core_id] = []
+                cpu_cores[numa_id][core_id].append(cpu_id)
+
+        for numa_id, cores in cpu_cores.items():
+            numa_slice = []
+            for core_id, cpu_ids in cores.items():
+                numa_slice.append(str(cpu_ids[0]))
+            bind_cpu_cores.append(numa_slice)
+        return bind_cpu_cores
+
     def linux_init(self):
         lscpu_cmd = "lscpu"
         try:
@@ -326,17 +353,7 @@ class PlatformUtil:
             if self.num_numa_nodes > 0 and self.args.numa_cores_per_instance is not None:
                 try:
                     # Get the list of cores
-                    cpu_array_command = \
-                        "numactl -H | grep 'node [0-9]* cpus:' |" \
-                        "sed 's/.*node [0-9]* cpus: *//' | head -{0} |cut -f1-{1} -d' '".format(
-                            self.num_numa_nodes, int(cores_per_node))
-                    cpu_array = subprocess.Popen(
-                        cpu_array_command, shell=True, stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE).stdout.readlines()
-
-                    for node_cpus in cpu_array:
-                        node_cpus = str(node_cpus).lstrip("b'").replace("\\n'", " ")
-                        self.cpu_core_list.append([x for x in node_cpus.split(" ") if x != ''])
+                    self.cpu_core_list = self.get_cpu_cores()
 
                     # If we have the cpuset list, cross check that list with our core list and
                     # remove cores that are not part of the cpuset list
@@ -348,8 +365,8 @@ class PlatformUtil:
                         print("Core list: {}".format(self.cpu_core_list), flush=True)
 
                 except Exception as e:
-                    print("Warning: An error occured when getting the list of cores using '{}':\n {}".
-                          format(cpu_array_command, e))
+                    print("Warning: An error occured when getting the list of cores:\n {}".
+                          format(e))
 
         if self.cpuset_cpus is not None:
             # Reformat the cpuset_cpus list so that it's split up by node
