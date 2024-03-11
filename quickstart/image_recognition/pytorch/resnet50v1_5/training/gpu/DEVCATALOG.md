@@ -4,8 +4,9 @@
 This document has instructions for running ResNet50 v1.5 training with BFloat16 precision on Intel® Data Center GPU Max Series using Intel® Extension for PyTorch.
 
 ## Datasets
-Download and extract the ImageNet2012 training and validation dataset from [http://www.image-net.org/ (http://www.image-net.org/),then move validation images to labeled subfolders, using
-[the valprep.sh shell script](https://raw.githubusercontent.com/soumith/imagenetloader.torch/master/valprep.sh)
+Following PyTorch [example guide](https://github.com/pytorch/examples/tree/main/imagenet#requirements) to download and prepare ImageNet dataset:
+1. Download the ImageNet dataset from http://www.image-net.org/.
+2. Then, move and extract the training and validation images to labeled subfolders, using [the shell script](https://github.com/pytorch/examples/blob/main/imagenet/extract_ILSVRC.sh).
 
 After running the data prep script and extracting the images, your folder structure
 should look something like this:
